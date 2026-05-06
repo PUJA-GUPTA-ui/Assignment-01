@@ -1,29 +1,30 @@
 import java.util.*;
-public class Problem2 {
-    public static int minOperations(int[] arr, int k) {
-        int n = arr.length;
-        int rem = arr[0] % k;
-        for (int num : arr) {
-            if (num % k != rem) {
-                return -1;
+
+public class Problem1 {
+    public static int maxCyclicSubstringSum(String s) {
+        int n = s.length();
+        String doubled = s + s;
+        Set<Character> set = new HashSet<>();
+        int left = 0;
+        int currentSum = 0;
+        int maxSum = 0;
+        for (int right = 0; right < doubled.length(); right++) {
+            char ch = doubled.charAt(right);
+            while (set.contains(ch) || (right - left + 1) > n) {
+                char leftChar = doubled.charAt(left);
+                set.remove(leftChar);
+                currentSum -= (leftChar - 'a' + 1);
+                left++;
             }
+            set.add(ch);
+            currentSum += (ch - 'a' + 1);
+            maxSum = Math.max(maxSum, currentSum);
         }
-        Arrays.sort(arr);
-        int median = arr[n / 2];
-        int operations = 0;
-        for (int num : arr) {
-            operations += Math.abs(num - median) / k;
-        }
-        return operations;
+        return maxSum;
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
-        }
-        int k = sc.nextInt();
-        System.out.println(minOperations(arr, k));
+        String s = sc.nextLine();
+        System.out.println(maxCyclicSubstringSum(s));
     }
 }
